@@ -1,0 +1,36 @@
+{% extends "base.html.twig" %}
+{% block style %}<link href="css/style-signin.css" rel="stylesheet"> {% endblock %}
+{% block title %} {{ parent() }} - Modifier un contrat {% endblock %}
+ 
+{% block contenu %}
+ 
+    {% if form.contrat is defined %}
+        {% if form.contrat != null %}
+ 
+            <form class="form-signin" action="index.php?page=contratmodif" method="post" enctype="application/x-www-form-urlencoded">
+                <h1 class="h3 mb-3 font-weight-normal">Modifier un contrat</h1>
+                <input type="hidden" name="numCont" id='numCont' value="{{ form.contrat.numCont }}"/>
+                <label for="inputIntitule" class="sr-only">Intitulé:</label>
+                <input type="intitule" id="inputIntitule" name="inputIntitule" class="form-control" placeholder="intitule" value="{{form.contrat.intitule}}">
+ 
+                <label for="inputPaiement" class="sr-only"> Modifier le paiement:</label>
+                <input type="paiement" id="inputPaiement" name="inputPaiement" class="form-control" placeholder="paiement" value="{{form.contrat.paiement}}">
+                
+                
+            {% endif %}    
+ 
+            <button class="btn btn-lg btn-primary btn-block" type="submit" name="btModifierC">Modifier</button>
+ 
+        </form>
+ 
+    {% endif %}    
+ 
+    {% if form.valide == false %}
+        <h1 class="h3 mb-3 font-weight-normal">{{ form.message }} </h1>
+        <h1 class="h3 mb-3 font-weight-normal"><a href="index.php?page=contrat" class="violet">Retourner sur la liste des contrats</a></h1>
+    {% else %}    
+        <h1 class="alert alert-success" role="alert">{{ form.message }}</h1>
+        <h1 class="h3 mb-3 font-weight-normal"><a href="index.php?page=contrat" class="violet">Retourner sur la liste des contrats</a></h1>
+    {% endif %}      
+ 
+{% endblock %}

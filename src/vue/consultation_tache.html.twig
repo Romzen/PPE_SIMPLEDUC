@@ -1,0 +1,117 @@
+{% extends "base.html.twig" %}
+
+{% block title %} {{ parent() }} - Gestion des équipes {% endblock %}
+
+{% block contenu %} 
+    <h1>Gestion de taches : {{form.tache.libelle}}</h1>
+
+    {%if form.valide is defined%}
+        {%if form.valide == true %}
+            <h1 class="alert alert-success" role="alert">{{form.message}}</h1>  
+        {%else%}
+            <h1 class="alert alert-success" role="alert">{{form.message}}</h1>  
+            <h1 class="h3 mb-3 font-weight-normal"><a href="index.php?page=consultation_projet&id={{form.projet.id}}" class="violet">Retourner sur le projet</a></h1>
+        {%endif%}
+    {%endif%}
+
+    {%if form.finUser is defined%}
+        {%if form.finUser == true%}
+            <h1 class="alert alert-success" role="alert">Participation terminée</h1>  
+            <h1 class="h3 mb-3 font-weight-normal"><a href="index.php?page=consultation_projet&id={{form.projet.id}}" class="violet">Retourner sur le projet</a></h1>
+        {%endif%}
+
+    {%else%}
+
+
+        {%if form.termine is defined%}
+            {%if form.termine == true%}
+                <h1 class="alert alert-success" role="alert">{{ form.message }}</h1>  
+                <h1 class="h3 mb-3 font-weight-normal"><a href="index.php?page=consultation_projet&id={{form.projet.id}}" class="violet">Retourner sur le projet</a></h1>
+            {%endif%}
+        {%else%}
+
+            {%set cout = 0 %}
+            {%for e in form.effectuer%}
+                {%for u in form.utilisateur%}
+                    {%if e.id_dev == u.id and e.id_tache == form.tache.id%}      
+                        {%set cout = cout + u.coutHoraire * e.nbHeures%}      
+                    {%endif%}
+                {%endfor%}        
+            {%endfor%}
+            <h1> Cout de la tache : {{cout}}€</h1>
+
+            {%set heure = 0 %}
+            {%for e in form.effectuer%}
+                {%if e.id_tache == form.tache.id%}      
+                    {%set heure = heure + e.nbHeures%}      
+                {%endif%} 
+            {%endfor%}
+
+            <h1>Nombres d'heures totale de la tache : {{heure}}h</h1>
+
+            <hr>
+
+            {%if form.tache.termine == 0 %}
+
+                <form class="form-signin" action="index.php?page=consultation_tache&id={{form.tache.id}}&id_projet={{form.projet.id}}" method="post" enctype="application/x-www-form-urlencoded">
+                    <h1 class="h3 mb-3 font-weight-normal">Ajouter un utilisateur</h1>
+                    <select class="form-control" name="id_dev" id='id_dev '>
+                        {%for pA in form.participer%}
+                            {%for u in form.utilisateur %}
+                                {% if pA.id_projet == form.projet.id and pA.id_dev == u.id%}
+                                    <option value="{{ pA.id_dev }}">{{ u.nom }}</option>
+                                {%endif%}
+                            {% endfor %}   
+                        {% endfor %}   
+                    </select>
+                    <input type="integer" id="nbHeures" name="nbHeures" class="form-control" placeholder="Nombres d'heures travaillées">
+                    <button class="btn btn-lg  btn-block" type="submit" name="btAjouterUser">Ajouter</button>
+                </form>
+            {%endif%}
+            <hr>
+
+            <form action="index.php?page=consultation_tache&id={{form.tache.id}}&id_projet={{form.projet.id}}" method="post"enctype="application/x-www-form-urlencoded">
+                <div class="panel">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading background-violet">Liste des developpeurs participants</div>
+
+                    <!-- Table -->
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped">
+                            <tr><th>Email</th><th>Nom</th><th>Heures de travail</th><th>Cout horaire</th><th>Date d'ajout</th><th>Date de fin</th>{%if form.tache.termine == 0 %}<th></th><th></th><th></th>{%endif%}</tr>
+
+                            {%for e in form.effectuer%}
+                                {%for u in form.utilisateur%}
+                                    {%if e.id_dev == u.id and e.id_tache == form.tache.id%}
+                                        <tr><td>{{u.email}}</td>
+                                            <td>{{u.nom}}</td>
+                                            <td>{{e.nbHeures}}h</td>  
+                                            <td>{{u.coutHoraire}}€</td>
+                                            <td>{{e.date_debut}}</td>
+                                            <td>{{e.date_fin}}</td>
+                                            {%if form.tache.termine == 0 %}
+                                                <td><input type="checkbox" name="cocher[]" id="cocher[]" value="{{e.id_dev}}"/></td>
+                                                <td></td>
+                                                <td><div class="btn-group btn-group-lg"><a href="index.php?page=consultation_tache&id={{e.id_tache}}&id_projet={{form.projet.id}}&id_utilisateur={{u.id}}"><span class="glyphicon glyphicon-trash violet" aria-hidden="true"></span></a></div></td>
+                                                        {%endif%}
+
+                                        </tr> 
+
+
+                                    {%endif%}
+                                {%endfor%}        
+                            {%endfor%}
+                        </table>
+                    </div>     
+                </div>
+                <input type="hidden" name="cout" id="cout" value="{{cout}}">
+                <input type="hidden" name="nbHeureTache" id="nbHeureTache" value="{{heure}}">
+                {%if form.tache.termine == 0 %}
+                    <button class="btn btn-lg btn-primary btn-block" type="submit" name="btFinParticipation">Participation terminée</button>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit" name="btTerminer">Tache terminée</button>
+                {%endif%}
+            </form>
+            <a href="index.php?page=consultation_projet&id={{form.projet.id}}">Retour au projet </a>
+        {%endif%}  
+    {%endif%} 
+{%endblock%}

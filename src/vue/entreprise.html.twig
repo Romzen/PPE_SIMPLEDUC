@@ -1,0 +1,53 @@
+{% extends "base.html.twig" %}
+
+{% block title %} {{ parent() }} - Gestion des Entreprises {% endblock %}
+       
+{% block contenu %} 
+    
+    <h1> Gestion des entreprises </h1> 
+
+{% if form.valide is defined %} 
+    {% if form.valide == true %}
+       <h1 class="h3 mb-3 font-weight-normal">{{ form.message }}</h1>
+       {% else %}  
+       <h1 class="alert alert-danger" role="alert">{{ form.message }}</h1> 
+    {% endif %}         
+{% endif %}
+
+    <br>
+
+    <h1>Ajouter une Entreprise</h1>
+
+    <form class="form-signin" action="index.php?page=entreprise" method="post" enctype="application/x-www-form-urlencoded">     
+        <label for="nom" class="sr-only">Nom:</label>
+        <input type="text" id="nom" name="nom" class="form-control" placeholder="Nom" required>   
+        <label for="nom" class="sr-only">Tel:</label>
+        <input type="text" id="tel" name="tel" class="form-control" placeholder="Numéro de téléphone" required>
+        <label for="nom" class="sr-only">Adresse:</label>
+        <input type="text" id="adresse" name="adresse" class="form-control" placeholder="Adresse" required>
+        <button class="btn btn-lg  btn-block" type="submit" name="btAjouterE">Ajouter</button>    
+    </form>
+    
+    <br>
+    
+<div class="panel">
+  <!-- Default panel contents -->
+  <div class="panel-heading background-violet">Liste des entreprises</div>
+
+  <!-- Table -->
+  <div class="table-responsive">
+  <table class="table table-hover table-striped">
+      <tr><th>Nom</th><th>tel</th><th>adresse</th><th></th><th></th></tr>
+   {% for e in liste %}
+          <tr>
+              <td><a href="index.php?page=consultation_entreprise&id={{e.id}}">{{e.nom}}</a></td>
+              <td>{{e.tel}}</td>
+              <td>{{e.adresse}}</td>
+          <td> <div class="btn-group btn-group-lg"><a href="index.php?page=entreprisemodif&id={{e.id}}"><span class="glyphicon glyphicon-pencil violet" aria-hidden="true"></span></a></div></td>
+          <td><div class="btn-group btn-group-lg"><a href="index.php?page=entreprise&id={{e.id}}"><span class="glyphicon glyphicon-trash violet" aria-hidden="true"></span></a></div></td></tr> 
+   {% endfor %}    
+  </table>
+  </div>
+</div>
+
+{% endblock %} 

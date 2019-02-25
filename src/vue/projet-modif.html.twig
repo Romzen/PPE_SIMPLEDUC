@@ -1,0 +1,38 @@
+{% extends "base.html.twig" %}
+{% block style %}<link href="css/style-signin.css" rel="stylesheet"> {% endblock %}
+{% block title %} {{ parent() }} - Modifier un projet {% endblock %}
+
+{% block contenu %} 
+
+    {% if form.projet is defined %} 
+        {% if form.projet != null %}
+
+            <form class="form-signin" action="index.php?page=projetmodif" method="post" enctype="application/x-www-form-urlencoded">
+                <h1 class="h3 mb-3 font-weight-normal">Modifier un projet</h1>
+                <input type="hidden" name="id" id='id' value="{{ form.projet.id }}"/>
+                <label for="inputLibelle" class="sr-only">Libellé:</label>
+                <input type="libelle" id="inputLibelle" name="inputLibelle" class="form-control" placeholder="libelle" value="{{form.projet.libelle}}">
+                <label for="inputIdContrat" class="sr-only"> Modifier le contrat:</label>
+                <input type="id_contrat" id="inputIdContrat" name="inputIdContrat" class="form-control" placeholder="id_contrat" value="{{form.projet.id_contrat}}">
+                <label for="inputDateDebut" class="sr-only"> Modifier la date de debut:</label>
+                <input type="date" id="inputDateDebut" name="inputDateDebut" class="form-control" placeholder="date_debut" value="{{form.projet.date_debut}}">
+                <label for="inputDateFin" class="sr-only"> Modifier la date de fin:</label>
+                <input type="date" id="inputDateFin" name="inputDateFin" class="form-control" placeholder="date_fin" value="{{form.projet.date_fin}}">
+                
+            {% endif %}    
+
+            <button class="btn btn-lg btn-primary btn-block" type="submit" name="btModifierP">Modifier</button>
+
+        </form>
+
+    {% endif %}     
+
+    {% if form.valide == false %}
+        <h1 class="h3 mb-3 font-weight-normal">{{ form.message }} </h1>
+        <h1 class="h3 mb-3 font-weight-normal"><a href="index.php?page=projet" class="violet">Retourner sur la liste des projets</a></h1>
+    {% else %}    
+        <h1 class="alert alert-success" role="alert">{{ form.message }}</h1> 
+        <h1 class="h3 mb-3 font-weight-normal"><a href="index.php?page=projet" class="violet">Retourner sur la liste des projets</a></h1>
+    {% endif %}      
+
+{% endblock %}

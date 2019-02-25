@@ -1,0 +1,91 @@
+{% extends "base.html.twig" %}
+{% block style %}<link href="css/style-signin.css" rel="stylesheet"> {% endblock %}
+{% block title %} {{ parent() }} Informations de L'utilisateur {% endblock %}
+
+{% block contenu %} 
+
+    {% if form.valide is defined %} 
+        {% if form.valide == true %}
+            <h1 class="h3 mb-3 font-weight-normal">{{ form.message }}</h1>
+            <h1 class="h3 mb-3 font-weight-normal"><a href="index.php?page=utilisateur" class="violet">Retourner sur la liste des utilisateurs</a></h1>
+        {% else %}  
+            <h1 class="alert alert-danger" role="alert">{{ form.message }}</h1> 
+            <h1 class="h3 mb-3 font-weight-normal"><a href="index.php?page=utilisateur" class="violet">Retourner sur la liste des utilisateurs</a></h1>
+        {% endif %}         
+    {% endif %} 
+
+    <div class="informations">
+        {% if form.utilisateur is defined %} 
+            {% if form.utilisateur != null %}
+                <h1 >Information de {{form.utilisateur.nom}}</h1>
+                <hr>
+                {# Nom et prénom #}
+                <h1>Prénom : {{form.utilisateur.prenom}}</h1>
+
+                <h1> Cout horaire : {{form.utilisateur.coutHoraire}}€ </h1>
+                
+                {% for r in form.role %}
+                    {% if r.id==form.utilisateur.idRole %}
+                        <h1>Role : {{r.libelle}}</h1>
+                    {% endif %}    
+                {% endfor %}  
+                
+                        
+                    
+                <hr>
+
+                <div class="panel">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading background-violet">Outils utilisés</div>
+                    <!-- Table -->
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped">
+                            <tr><th>Nom</th><th></th><th></th></tr>
+                                    {%for uT in form.utiliser %}
+                                        {%for o in form.outils %}
+                                            {%if form.utilisateur.id == uT.id_dev and uT.id_outil == o.id%}                          
+                                        <tr>
+                                            <td>{{o.libelle}}</td>
+                                            <td></td>
+                                            <td><a href="index.php?page=utilisateur_info&id_outil={{uT.id_outil}}&id_dev={{uT.id_dev}}"><span class="glyphicon glyphicon-trash violet" aria-hidden="true"></span></a></td>
+                                        </tr> 
+                                            {%endif%}
+                                        {%endfor%}
+                                    {%endfor%}
+                        </table>
+                    </div>
+                </div>
+
+                <br/>
+
+                <div class="panel">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading background-violet">Projets liés</div>
+                    <!-- Table -->
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped">
+                            <tr><th>Nom</th><th>Responsable</th><th></th></tr>
+                                    {%for pT in form.participer %}
+                                        {%for p in form.projet %}
+                                            {%if form.utilisateur.id == pT.id_dev and pT.id_projet == p.id%}                          
+                                        <tr><td>{{p.libelle}}</td>
+                                            <td>{%if pT.responsable == 1%}OUI{%else%}NON{%endif%}</td>
+                                            <td><a href="index.php?page=utilisateur_info&id_projet={{pT.id_projet}}&id_dev={{pT.id_dev}}"><span class="glyphicon glyphicon-trash violet" aria-hidden="true"></span></a> </td>
+                                        </tr> 
+                                            {%endif%}
+                                        {%endfor%}
+                                    {%endfor%}
+                        </table>
+                    </div>
+                </div>
+                <hr>
+                <h1 class="h3 mb-3 font-weight-normal"><a href="index.php?page=utilisateur" class="violet">Retourner sur la liste des utilisateurs</a></h1>
+            </div>
+
+        {% else %} 
+            <h1 class="alert alert-danger" role="alert">{{ form.message }}</h1> 
+            <h1 class="h3 mb-3 font-weight-normal"><a href="index.php?page=utilisateur" class="violet">Retourner sur la liste des utilisateurs</a></h1>
+        {% endif %}     
+    {% endif %}      
+
+{% endblock %} 

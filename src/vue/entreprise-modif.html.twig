@@ -1,0 +1,41 @@
+{% extends "base.html.twig" %}
+{% block style %}<link href="css/style-signin.css" rel="stylesheet"> {% endblock %}
+{% block title %} {{ parent() }} - Modifier une entreprise {% endblock %}
+       
+{% block contenu %} 
+
+{% if form.entreprise is defined %} 
+    {% if form.entreprise != null %}
+        
+      
+      <form class="form-signin" action="index.php?page=entreprisemodif" method="post" enctype="application/x-www-form-urlencoded">
+      <h1 class="h3 mb-3 font-weight-normal">Modifier une entreprise</h1>
+      
+      <input type="hidden" name="id" id="id" value="{{ form.entreprise.id }}"/>
+
+      <label for="inputNom" class="sr-only">Nom:</label>
+      <input type="nom" id="inputNom" name="inputNom" class="form-control" placeholder="nom" value="{{form.entreprise.nom}}">
+   
+      
+      <label for="inputTel" class="sr-only"> telephone:</label>
+      <input type="tel" id="inputTel" name="inputTel" class="form-control" placeholder="tel" value="{{form.entreprise.tel}}">
+      
+      <label for="inputAdresse" class="sr-only"> adresse:</label>
+      <input type="adresse" id="inputAdresse" name="inputAdresse" class="form-control" placeholder="adresse" value="{{form.entreprise.adresse}}">
+    {% endif %}    
+      
+    <button class="btn btn-lg btn-primary btn-block" type="submit" name="btModifierE">Modifier</button>
+     
+      </form>
+    {% else %} 
+       <h1 class="alert alert-success" role="alert">{{ form.message }}</h1> 
+       <h1 class="h3 mb-3 font-weight-normal"><a href="index.php?page=entreprise" class="violet">Retourner sur la liste des entreprises</a></h1>
+    {% endif %}     
+   
+
+     {% if form.valide == false %}
+         <h1 class="h3 mb-3 font-weight-normal">{{ form.message }} </h1>
+         <h1 class="h3 mb-3 font-weight-normal"><a href="index.php?page=entreprise" class="violet">Retourner sur la liste des entreprises</a></h1>
+    {% endif %}      
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html.twig" %}
+{% block style %}<link href="css/style-signin.css" rel="stylesheet"> {% endblock %}
+{% block title %} {{ parent() }} - Outils {% endblock %}
+{% block contenu %}
+
+    <h1>Ajouter un outil</h1>
+    <form class="form-signin" action="index.php?page=outil" method="post" enctype="application/x-www-form-urlencoded">     
+        <label for="nom" class="sr-only">Nom:</label>
+        <input type="text" id="libelle" name="libelle" class="form-control" placeholder="Nom" required>     
+        <button class="btn btn-lg  btn-block" type="submit" name="btAjouter">Ajouter</button>    
+    </form>
+
+    <h1> Gestion des Outils </h1> 
+    <div class="panel">     
+        <div class="panel-heading background-violet">Liste des outils</div>
+        <div class="table-responsive">
+            <table class="table table-hover table-striped">
+                <tr><th>Nom</th><th></th><th></th></tr>
+                        {% for o in liste %}
+                    <tr><td>{{o.libelle}}</td><td> <div class="btn-group btn-group-lg"><a href="index.php?page=outil-modif&id={{o.id}}"><span class="glyphicon glyphicon-pencil violet" aria-hidden="true"></span></a></div></td><td><div class="btn-group btn-group-lg"><a href="index.php?page=outil&id={{o.id}}"><span class="glyphicon glyphicon-trash violet" aria-hidden="true"></span></a></div></td></tr> 
+                        {%endfor%}
+            </table>
+        </div>
+    </div>
+{% endblock %}

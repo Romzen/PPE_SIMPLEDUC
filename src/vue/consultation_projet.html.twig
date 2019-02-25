@@ -1,0 +1,115 @@
+{% extends "base.html.twig" %}
+
+{% block title %} {{ parent() }} - Gestion des équipes {% endblock %}
+
+{% block contenu %} 
+
+    {%if form.valide is defined%}
+        {%if form.valide == true%}
+            <h1 class="alert alert-success" role="alert">{{ form.message }}</h1>  
+            <h1 class="h3 mb-3 font-weight-normal"><a href="index.php?page=projet" class="violet">Retourner sur la liste des projet</a></h1>
+        {%else%}
+            <h1 class="alert alert-danger" role="alert">{{ form.message }}</h1>  
+            <h1 class="h3 mb-3 font-weight-normal"><a href="index.php?page=projet" class="violet">Retourner sur la liste des projet</a></h1>
+        {%endif%}
+        
+    {%else%}
+      
+    {%if form.projet is defined %}
+        {% if form.projet != null %}   
+            <h1> Gestion des Projets : {{form.projet.libelle}}</h1> 
+
+            {%set coutT = 0%}
+            {%set heure = 0 %}
+            {%for t in form.tache%}
+                {%if t.id_projet == form.projet.id%}      
+                    {%set heure = heure + t.nbHeureTache%}  
+                    {%set coutT = coutT + t.cout%}
+                {%endif%} 
+            {%endfor%}
+            <h1>Cout total du projet : {{coutT}}€</h1>
+
+            <h1>Nombres d'heures totale du projet : {{heure}}h</h1>
+
+            <hr>
+
+            <div class="panel">
+                <!-- Default panel contents -->
+                <div class="panel-heading background-violet">Liste des developpeurs participants</div>
+
+                <!-- Table -->
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <tr><th>Email</th><th>Nom</th><th>Prénom</th><th>Responsable</th><th>Cout horaire</th>{%if form.projet.termine == 0 %}<th></th><th></th></tr>{%endif%}
+
+                        {%for pA in form.participer%}
+                            {%for u in form.utilisateur%}
+                                {%if pA.id_projet == form.projet.id and pA.id_dev == u.id%}
+                                    <tr><td>{{u.email}}</td>
+                                        <td>{{u.nom}}</td>
+                                        <td>{{u.prenom}}</td>
+                                        <td>{%if pA.responsable == 1 %}OUI {%else%} NON{%endif%}</td>
+                                        <td>{{u.coutHoraire}}€</td>
+                                        {%if form.projet.termine == 0 %}
+                                            <td></td>
+                                            <td><div class="btn-group btn-group-lg"><a href="index.php?page=consultation_projet&id={{form.projet.id}}&id_dev={{u.id}}"><span class="glyphicon glyphicon-trash violet" aria-hidden="true"></span></a></div></td></tr> 
+                                        {%endif%}
+                                {%endif%}
+                            {%endfor%}
+                        {%endfor%}
+                    </table>
+                </div>     
+            </div>
+            {%if form.projet.termine == 0 %}
+            <a href="index.php?page=ajout-utilisateurprojet&id={{form.projet.id}}">Ajouter un utilisateur</a>
+            {%endif%}
+            <hr>
+
+            {%set cout = 0 %}
+
+            <div class="panel">
+                <!-- Default panel contents -->
+                <div class="panel-heading background-violet">Liste des tâches a réaliser</div>
+
+                <!-- Table -->
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <tr><th>Libelle</th><th>Nombres d'heures</th><th>Cout</th><th>Date D'ajout</th><th>Date de fin</th><th>Terminée</th>{%if form.projet.termine == 0 %}<th></th> {%endif%}</tr>        
+
+                        {%for t in form.tache%}   
+                            {%if t.id_projet == form.projet.id %}
+                                <tr><td><a href="index.php?page=consultation_tache&id={{t.id}}&id_projet={{form.projet.id}}">{{t.libelle}}</a></td>
+                                    <td>{{t.nbHeureTache}}h</td>
+                                    <td>{{t.cout}}€</td>
+                                    <td>{{t.date_debut}}</td>
+                                    <td>{{t.date_fin}}</td>
+                                    <td>{%if t.termine == 0%}Non {%else%}Oui{%endif%}</td>
+                                    {%if form.projet.termine == 0 %} <td><div class="btn-group btn-group-lg"><a href="index.php?page=consultation_projet&id={{form.projet.id}}&id_tache={{t.id}}"><span class="glyphicon glyphicon-trash violet" aria-hidden="true"></span></a></div></td>{%endif%}</tr> 
+                            {%endif%}
+                        {%endfor%}
+                    </table>
+                </div>
+            </div>
+            {%if form.projet.termine == 0 %}        
+            <a href="index.php?page=ajout-tacheProjet&id={{form.projet.id}}">Ajouter une Tache</a>
+            {%endif%}
+            <hr>
+        {%endif%}
+        {%if form.projet.termine == 0 %}
+            <form action="index.php?page=consultation_projet&id={{form.projet.id}}" method="post"enctype="application/x-www-form-urlencoded">
+                <input type="hidden" name="cout" id="cout" value="{{coutT}}">
+                <button class="btn btn-lg btn-primary btn-block" type="submit" name="btTerminer">Terminer un projet</button>
+            </form>
+        {%endif%}
+        <h1 class="h3 mb-3 font-weight-normal"><a href="index.php?page=projet" class="violet">Retourner sur la liste des projet</a></h1>
+
+        {% if form.valide == true %}
+            <h1 class="alert alert-danger" role="alert">{{ form.message }}</h1>  
+        {%endif%}
+
+    {% else %} 
+        <h1 class="alert alert-danger" role="alert">{{ form.message }}</h1>
+        <h1 class="h3 mb-3 font-weight-normal"><a href="index.php?page=consultation_projet&id={{form.projet.id}}" class="violet">Retourner sur la liste des projet</a></h1>
+    {% endif %} 
+{%endif%}  
+{%endblock%}

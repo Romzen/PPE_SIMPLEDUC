@@ -1,0 +1,43 @@
+{% extends "base.html.twig" %}
+
+{% block title %} {{ parent() }} - Gestion des Entreprises {% endblock %}
+       
+{% block contenu %} 
+    
+    <h1> Gestion des entreprises : {{form.entreprise.nom}}</h1> 
+
+{% if form.valide is defined %} 
+    {% if form.valide == true %}
+       <h1 class="h3 mb-3 font-weight-normal">{{ form.message }}</h1>
+       {% else %}  
+       <h1 class="alert alert-danger" role="alert">{{ form.message }}</h1> 
+    {% endif %}         
+{% endif %}
+
+    
+<div class="panel">
+  <!-- Default panel contents -->
+  <div class="panel-heading background-violet">Liste des entreprises</div>
+
+  <!-- Table -->
+  <div class="table-responsive">
+      
+      
+  <table class="table table-hover table-striped">
+      <tr><th>Contrat</th><th>Paiement</th><th>Date de signature du contrat</th><th></th></tr>
+   
+          {%for c in liste %}
+            {%if c.id_entreprise == form.entreprise.id%}
+          <tr>
+              <td>{{c.intitule}}</a></td>
+              <td>{{c.paiement}}€</td>
+              <td>{{c.date_contrat}}</td>
+              <td><div class="btn-group btn-group-lg"><a href="index.php?page=entreprise&id={{e.id}}"><span class="glyphicon glyphicon-trash violet" aria-hidden="true"></span></a></div></td></tr> 
+              {%endif%}
+          {% endfor %}    
+  </table>
+  </div>
+</div>
+  <a href="index.php?page=entreprise">Retour a la liste des entreprises</a>
+
+{% endblock %} 

@@ -1,0 +1,49 @@
+<link href="css/style.css" rel="stylesheet">
+<style>
+    table {
+        border: 1px solid black;
+        border-collapse: collapse;
+        margin: 10%;
+    }
+    th {
+        background-color: violet;
+        color: white;
+    }
+    tr, td, th {
+        text-align: center;
+        padding-left: 10px;
+        padding-right: 10px;
+        border: 1px solid black;
+    }
+    td {
+        padding: 10px;
+    }
+    h1 {
+        text-align: center;
+    }
+</style>
+<h1>Liste des projet </h1>
+<table>
+        <tr>
+            <th>Libellé</th>
+            <th>Contrat</th>
+            <th>Date de début</th>
+            <th>Date de fin</th>
+            <th>Terminé</th>
+        </tr>
+        {% for p in liste %}
+            {%for c in listeC %}
+                {% if p.id_contrat == c.numCont %}
+
+                    <tr>
+                        <td>{{p.libelle}}</td>
+                        <td>{{c.intitule}}</td>
+                        <td>{{p.date_debut}}</td>
+                        <td>{{p.date_fin}}</td> 
+                        <td> {% if p.termine == 1%}Oui {%else%} Non {%endif%}</td>
+                    </tr> 
+                {%endif%}
+            {%endfor %}
+        {% endfor %}   
+    </table>       
+

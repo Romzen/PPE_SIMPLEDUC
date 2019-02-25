@@ -1,0 +1,33 @@
+{% extends "base.html.twig" %}
+
+{% block title %} {{ parent() }} - Gestion des équipes {% endblock %}
+
+{%block contenu %}
+
+    {% if form.valide is defined %} 
+        {% if form.valide == true %}
+            <h1 class="alert alert-succes" role="alert">{{ form.message }}</h1> 
+            <h1 class="h3 mb-3 font-weight-normal"><a href="index.php?page=consultation_projet&id={{form.projet.id}}">Retourner sur la page du projet</a></h1>
+        {% else %} 
+            <h1 class="alert alert-danger" role="alert">{{ form.message }}</h1> 
+            <h1 class="h3 mb-3 font-weight-normal"><a href="index.php?page=consultation_projet&id={{form.projet.id}}">Retourner sur la page d'inscription</a></h1>
+        {% endif %}     
+
+    {% else %}  
+
+        <form class="form-signin" action="index.php?page=ajout-utilisateurprojet&id={{form.projet.id}}" method="post" enctype="application/x-www-form-urlencoded">
+            <h1 class="h3 mb-3 font-weight-normal">Ajouter un utilisateur</h1>
+            <select class="form-control" name="id_dev" id='id_dev '>
+                {%for u in liste%}
+                    <option value="{{ u.id }}">{{ u.nom }}</option>  
+                {% endfor %}   
+            </select>
+            <input type="checkbox" id="responsable" name="responsable" value="1">
+            <label>Responsable</label>
+            <button class="btn btn-lg  btn-block" type="submit" name="btAjouterUser">Ajouter</button>
+            <a href="index.php?page=consultation_projet&id={{form.projet.id}}">Retourner au projet</a>
+        </form>
+
+    {%endif%}
+
+{%endblock%}

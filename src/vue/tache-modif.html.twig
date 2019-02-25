@@ -1,0 +1,35 @@
+{% extends "base.html.twig" %}
+{% block style %}<link href="css/style-signin.css" rel="stylesheet"> {% endblock %}
+{% block title %} {{ parent() }} - Modifier une tâche {% endblock %}
+
+{% block contenu %} 
+
+    {% if form.tache is defined %} 
+        {% if form.tache != null %}
+
+            <form class="form-signin" action="index.php?page=tachemodif" method="post" enctype="application/x-www-form-urlencoded">
+                <h1 class="h3 mb-3 font-weight-normal">Modifier une tâche</h1>
+                <input type="hidden" name="id" id='id' value="{{ form.tache.id }}"/>
+                <label for="inputLibelle" class="sr-only">Libellé:</label>
+                <input type="libelle" id="inputLibelle" name="inputLibelle" class="form-control" placeholder="libelle" value="{{form.tache.libelle}}">
+
+                <label for="inputNbHeureTache" class="sr-only"> Modifier le nombre heures tâches:</label>
+                <input type="nbHeureTache" id="inputNbHeureTache" name="inputNbHeureTache" class="form-control" placeholder="nbHeureTache" value="{{form.tache.nbHeureTache}}">
+
+            {% endif %}    
+
+            <button class="btn btn-lg btn-primary btn-block" type="submit" name="btModifierT">Modifier</button>
+
+        </form>
+
+    {% endif %}     
+
+    {% if form.valide == false %}
+        <h1 class="h3 mb-3 font-weight-normal">{{ form.message }} </h1>
+        <h1 class="h3 mb-3 font-weight-normal"><a href="index.php?page=tache" class="violet">Retourner sur la liste des tâches</a></h1>
+    {% else %}    
+        <h1 class="alert alert-danger" role="alert">{{ form.message }}</h1> 
+        <h1 class="h3 mb-3 font-weight-normal"><a href="index.php?page=tache" class="violet">Retourner sur la liste des tâches</a></h1>
+    {% endif %}      
+
+{% endblock %}

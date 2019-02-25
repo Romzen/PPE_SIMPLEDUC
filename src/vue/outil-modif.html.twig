@@ -1,0 +1,28 @@
+{% extends "base.html.twig" %}
+{% block style %}<link href="css/style-signin.css" rel="stylesheet"> {% endblock %}
+{% block title %} {{ parent() }} - Outils {% endblock %}
+
+{% block contenu %}
+
+    {% if form.outil is defined %} 
+        {% if form.outil != null %}
+            <h1 >Modifier un outil</h1>
+            <form class="form-signin" action="index.php?page=outil-modif" method="post" enctype="application/x-www-form-urlencoded">     
+                <input type="hidden" id="id" name="id" value="{{form.outil.id}}"></input>
+                <label for="libelle" class="sr-only">Nom:</label>
+                <input type="text" id="libelle" name="libelle" class="form-control" value="{{form.outil.libelle}}" required>     
+                <button class="btn btn-lg  btn-block" type="submit" name="btModifier">Modifier</button>    
+            </form>
+        {%endif%} 
+    {%else%}
+        {% if form.valide == true %}
+            <h1 class="h3 mb-3 font-weight-normal">{{ form.message }} </h1>
+            <h1 class="h3 mb-3 font-weight-normal"><a href="index.php?page=outil" class="violet">Retourner sur la liste des utilisateurs</a></h1>
+        {% else %}    
+            <h1 class="alert alert-danger" role="alert">{{ form.message }}</h1> 
+            <h1 class="h3 mb-3 font-weight-normal"><a href="index.php?page=outil" class="violet">Retourner sur la liste des utilisateurs</a></h1>
+        {% endif %} 
+    {% endif %}
+
+
+{% endblock %}
